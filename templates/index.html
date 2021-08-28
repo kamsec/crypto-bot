@@ -66,11 +66,11 @@
                         <table style="width:100%">
                             <tr class="tile-header">
                                 <td>Current balance:</td>
-                                <td>{{ CURRENT_BALANCE_USD }} USD , {{ CURRENT_BALANCE_BTC }} BTC , TOTAL: {{ current_total_value_USD }} USD</td>
+                                <td>{{ CURRENT_BALANCE_USD }} USD , {{ CURRENT_BALANCE_BTC }} BTC , <span title="current_USD + current_BTC * current_BTCUSD_close">TOTAL: {{ current_total_value_USD }} USD</span></td>
                             </tr>
                             <tr class="tile-header">
                                 <td><div title="at {{ exact_starting_timestamp }}">Starting balance:</div></td>
-                                <td>{{ STARTING_BALANCE_USD }} USD , {{ STARTING_BALANCE_BTC }} BTC , TOTAL: {{ starting_total_value_USD }} USD</td>
+                                <td>{{ STARTING_BALANCE_USD }} USD , {{ STARTING_BALANCE_BTC }} BTC , <span title="starting_USD + starting_BTC * current_BTCUSD_close">TOTAL: {{ starting_total_value_USD }} USD</span></td>
                             </tr>
                             <tr class="tile-header">
                                 <td>Runtime accuracy:</td>

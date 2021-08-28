@@ -84,7 +84,7 @@ def generate_page():
     # lifetime profit string
     profit_from_start_text = '+0 USD (0.00%)'  # default text
     # [71] because at process_logfile for current timestamp we get df with 72 hours from past
-    starting_total_value_USD = STARTING_BALANCE_USD + STARTING_BALANCE_BTC * float(columns['BTCUSDT_close'][71])
+    starting_total_value_USD = STARTING_BALANCE_USD + STARTING_BALANCE_BTC * float(columns['BTCUSDT_close'][-1])
     if columns['BTCUSDT_close'][-1] is not None:
         current_total_value_USD = CURRENT_BALANCE_USD + CURRENT_BALANCE_BTC * float(columns['BTCUSDT_close'][-1])
         # these are TOTAL values (USD + BTC * BTCUSD_close)
