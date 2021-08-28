@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="github.com/kamsec">
+
+    <!-- Bootstrap CSS -->
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous"> -->
+    <link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+    <title>crypto-bot</title>
+</head>
+
+
+<body>
+    <div class="main-wrapper">
+        <header class="site-header">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="text-center">crypto-bot</h1>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div class="container my-1 py-1">
+                <div class="row">
+
+                    <div class="col-md-6 mb-1">
+                        <h5 class="text-center">Binance BTCUSDT_close_1h - 72h chart</h5>
+                        <canvas id="BTCUSD_chart"></canvas>
+
+                        <div style="display: flex; justify-content: space-around; width: 95%; margin: auto">
+                            <div><span class="green-small-dot"></span>Prediction UP</div>
+                            <div><span class="red-small-dot"></span>Prediction DOWN</div>
+                            <div><span class="green-big-dot"></span>Bought BTC</div>
+                            <div><span class="red-big-dot"></span>Sold BTC</div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-6 mb-1">
+                        <h5 class="text-center" >Log</h5>
+                        <div class="textarea-container">
+                            <textarea disabled id="log_textarea">{{ logs_data }}</textarea>
+                            <button id="break_line_button" onclick="toggle_line_break()">Break lines</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="container py-1" style="border: none;">
+                <div class="row">
+
+                    <div class ="col-lg-6 mb-2 mt-0" style="display: flex; justify-content: space-between;
+                                                  margin: auto; flex-wrap: wrap;">
+                        <table style="width:100%">
+                            <tr class="tile-header">
+                                <td>Current balance:</td>
+                                <td>{{ CURRENT_BALANCE_USD }} USD , {{ CURRENT_BALANCE_BTC }} BTC , TOTAL: {{ current_total_value_USD }} USD</td>
+                            </tr>
+                            <tr class="tile-header">
+                                <td><div title="at {{ exact_starting_timestamp }}">Starting balance:</div></td>
+                                <td>{{ STARTING_BALANCE_USD }} USD , {{ STARTING_BALANCE_BTC }} BTC , TOTAL: {{ starting_total_value_USD }} USD</td>
+                            </tr>
+                            <tr class="tile-header">
+                                <td>Runtime accuracy:</td>
+                                <td><span id="accuracy_pct">{{ accuracy_from_start }}%</span> , TOTAL: <span id="accuracy_text">{{ profit_from_start_text }}</span></td>
+                            </tr>
+                            <tr class="tile-header">
+                                <td>72h accuracy:</td>
+                                <td><span id="accuracy_72h_pct">{{ accuracy_72h }}%</span> , TOTAL: <span id="accuracy_72h_text">{{ _72h_profit_text }}</span></td>
+                            </tr>
+                            <tr class="tile-header">
+                                <td>Runtime price change:</td>
+                                <td><span id="runtime_price_change_text">{{ runtime_price_change_text }}</span></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class ="col-lg-6 mt-1 px-3" style="display: flex; justify-content: center; margin: auto; flex-wrap: wrap;">
+                        <div class="tile">
+                            <div class="tile-header">Started</div>
+                            <div class="tile-content">{{ exact_starting_timestamp[:10] }}<br>{{ exact_starting_timestamp[11:] }}</div>
+                        </div>
+                        <div class="tile">
+                            <div class="tile-header">Enviroment</div>
+                            <div class="tile-content">binance.com<br>{{ ENVIROMENT }}</div>
+                        </div>
+                        <div class="tile">
+                            <div class="tile-header">Last backup</div>
+                            <div class="tile-content">{{ last_commit_time[:10] }}<br>{{ last_commit_time[11:] }}</div>
+                        </div>
+                        <div class="tile">
+                            <div class="tile-header">Prediction model</div>
+                            <div class="tile-content mt-2">{{ MODEL_PATH.split("/")[2] }}</div>
+                        </div>
+                        <div class="tile">
+                            <div class="tile-header">Status</div>
+                            <div id="status" class="tile-content mt-2">{{ STATUS_ACTIVE_text }}</div>
+                        </div>
+
+                        <div class="tile">
+                            <div class="tile-header">Orders</div>
+                            <div id="orders" class="tile-content mt-2">{{ ORDERS_ALLOWED_text }}</div>
+                        </div>
+                        <div class="tile">
+                            <div class="tile-header">GitHub backups</div>
+                            <div id="backups" class="tile-content mt-2">{{ BACKUPS_ALLOWED_text }}</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="text-center">All timestamps are given in UTC+0</div>
+        </main>
+    </div>
+
+    <!-- Chart.js -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js" integrity="sha512-vBmx0N/uQOXznm/Nbkp7h0P1RfLSj0HQrFSzV8m7rOGyj30fYAOKHYvCNez+yM8IrfnW0TCodDEjRqf6fodf/Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+    <script src="{{ url_for('static', filename='Chart.bundle.min.js') }}"></script>
+
+    <script> // these wont work in external .js file, the easiest way is to do it here
+    {% autoescape false %} // removes quotes denoted as &#39, e.g. [&#39;BUY&#39;, &#39;SELL&#39;]
+        var data_index = {{ data_index }};
+        var data_values = {{ data_values }};
+        var predictions = {{ predictions }};
+        var orders = {{ orders }};
+    {% endautoescape %}
+    </script>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>

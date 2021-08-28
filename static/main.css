@@ -1,0 +1,141 @@
+
+canvas{
+    margin: 0 auto;
+}
+
+:root{
+    --bg_dark: #1c1b17;
+    --bg_light: #38362e;
+    --gray_light: #999999;
+    --gray_dark: #333333;
+
+    --green_light: #00ff00;
+    --green_dark: #33cc33;
+    --red_light: #ff0000;
+    --red_dark: #990000;
+}
+
+body{
+    height:100vh;
+    background: var(--bg_dark);
+    color: var(--gray_light);
+    display: flex;
+}
+
+.main-wrapper{
+    width: 100%;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.container{
+    width: 98%;
+    max-width: 1780px;
+    border-bottom: 1px solid var(--gray_dark);
+}
+
+textarea{
+    font-family:"Times New Roman", Times, serif;
+    background-color: var(--bg_dark);
+    white-space: pre;
+    overflow-wrap: normal;
+    border: none;
+    border: solid 1px var(--gray_dark);
+    color: var(--gray_light);
+    font-size: 15px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    resize: none;
+}
+
+.textarea-container {
+    position: relative;
+    height: 90%;
+    min-height:270px;
+}
+
+.textarea-container textarea {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.textarea-container button {
+    background-color: var(--bg_dark);
+    border-radius: 5px;
+    color: var(--gray_light);
+    border: solid 2px var(--green_light);
+    position: absolute;
+    top: 3px;
+    right: 22px;
+}
+
+.textarea-container button:hover {
+    background-color: var(--bg_light);
+}
+
+.button-clicked{
+    border: solid 1px var(--gray_light) !important;
+    top: 4px !important;
+    right: 23px !important;
+}
+
+/* removes browser focus outline */
+:focus {
+    outline:none !important;
+}
+
+/* dots for chart legend */
+.green-small-dot, .green-big-dot, .red-small-dot, .red-big-dot{
+    margin-right: 3px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.green-small-dot, .red-small-dot{
+    margin-bottom: 2px;
+    height: 5px;
+    width: 5px;
+}
+
+.green-big-dot, .red-big-dot{
+    margin-top: 8px;
+    height: 8px;
+    width: 8px;
+}
+
+.red-small-dot, .red-big-dot{
+    background-color: var(--red_light);
+}
+
+.green-small-dot, .green-big-dot{
+    background-color: var(--green_light);
+}
+
+.tile {
+    text-align: center;
+    display: block;
+    border: 1px solid var(--gray_dark);
+    border-radius: 5px;
+    min-height: 65px;
+    max-height: 65px;
+    padding: 0px 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 8px;
+}
+
+/* firefox only but without that it is fine too */
+.tile:nth-child(4n) {
+    break-after: always; /* New syntax */
+}
+
+.tile-header{
+    border-bottom: 1px solid var(--gray_dark);
+}
+
+.tile-content{
+    line-height: 18px;
+    margin-top: 0px;
+}
