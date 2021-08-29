@@ -1,7 +1,7 @@
 
 # crypto-bot
 
-![Screenshot](screenshot.PNG)
+![Screenshot](screenshot.png)
 
 ## Contents
 1. <a href="#about">About</a>
