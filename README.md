@@ -1,6 +1,8 @@
 
 # crypto-bot
 
+![Screenshot](screenshot.PNG)
+
 ## Contents
 1. <a href="#about">About</a>
 2. <a href="#crypto-bot-botpy">crypto-bot (bot.py)</a>
