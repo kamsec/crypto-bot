@@ -14,6 +14,7 @@
 4. <a href="#usage">Usage</a>
 5. <a href="#training">Training</a>
 6. <a href="#tools-and-tests">Tools and tests</a>
+7. <a href="#tools-and-tests">Issues</a>
 
 ## About
 This archive contains the source code of "crypto-bot", which is a cryptocurrency trading bot (`bot.py`) together with info-site (`app.py`) created with Flask.
@@ -212,6 +213,11 @@ Training neural network models is performed manually on Google Colab, and files 
 
 ## Tools and tests
 Tools for adding new data pairs and running bot simulation (placing orders during using past data) are located in `tools/` directory.
-In main directory, file `tests.py` contains tests and allows to run&test individial functions from the project.
+In main directory, file `tests.py` contains some manual tests and allows to run&test individial functions from the project.
+
+## Issues
+- Recent version of Firefox sometimes display parts of info-page incorrectly - just use Chrome in that case.
+- If you encounter Binance error "Timestamp for this request is 1000ms ahead of the server's" you should sync your system time with Binance. More information: https://github.com/ccxt/ccxt/issues/773
+
 
 
