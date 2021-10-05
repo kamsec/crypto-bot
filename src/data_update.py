@@ -31,20 +31,26 @@ def update_ratio(ratio, filename, request_records=500, fill_missing=False):
     # example:
     # curl -X GET "https://api.binance.com/api/v1/klines?&symbol=BTCUSDT&interval=3m"
     # https://binance-docs.github.io/apidocs/spot/en/#kline-candlestick-data
-    response = get('https://api.binance.com/api/v1/klines',
-                   params={'symbol': ratio,
-                           'interval': '1h',
-                           'startTime': last_record_unix,
-                           'limit': request_records})  # last_record_unix also limits number of records, if it's recent
-    raw_data = loads(response.content)
-    raw_data_df = pd.DataFrame(raw_data)
+    times_repeat_download = int((-seconds_remaining // (request_records * 3600))) + 1
+    new_df = pd.DataFrame(columns=[f'{ratio}_close', f'{ratio}_volume'])
+    for i in range(0, times_repeat_download):
+        temp_df = pd.DataFrame(columns=['date', f'{ratio}_close', f'{ratio}_volume'])
+        response = get('https://api.binance.com/api/v1/klines',
+                       params={'symbol': ratio,
+                               'interval': '1h',
+                               'startTime': last_record_unix + (i * request_records * 3600 * 1000),
+                               'limit': request_records})  # last_record_unix also limits number of records, if it's recent
+        raw_data = loads(response.content)
+        raw_data_df = pd.DataFrame(raw_data)
 
-    new_df = pd.DataFrame(columns=['date', f'{ratio}_close', f'{ratio}_volume'])
-    # we receive data in UTC+2 timezone, so need to set h=-2, so we pass list of [-2] as second argument
-    new_df['date'] = list(map(unix_to_datetime, raw_data_df[0], [UTC_OFFSET] * len(raw_data_df[0])))
-    new_df[f'{ratio}_close'] = list(map(float, raw_data_df[4]))  # df[4]  # Close
-    new_df[f'{ratio}_volume'] = list(map(float, raw_data_df[7]))  # df[7]  # Quote asset volume (second assets unit, so in BTC/USDT its volume_USDT)  # noqa
-    new_df.set_index("date", inplace=True)
+        # we receive data in UTC+2 timezone, so need to set h=-2, so we pass list of [-2] as second argument
+        temp_df['date'] = list(map(unix_to_datetime, raw_data_df[0], [UTC_OFFSET] * len(raw_data_df[0])))
+        temp_df[f'{ratio}_close'] = list(map(float, raw_data_df[4]))  # df[4]  # Close
+        temp_df[f'{ratio}_volume'] = list(map(float, raw_data_df[7]))  # df[7]  # Quote asset volume (second assets unit, so in BTC/USDT its volume_USDT)  # noqa
+        temp_df.set_index("date", inplace=True)
+        if i == 0:  # in first iteration we drop temp_df[0] because its the same as in old_df[-1]
+            temp_df = temp_df[1:]
+        new_df = pd.concat([new_df, temp_df])
     # if we send request at 15:27 (UTC-0 13:27) it will return data with last entry 13:00 which will change over time
     new_df = new_df[:-1]  # dropping that entry
 
@@ -66,17 +72,17 @@ def update_ratio(ratio, filename, request_records=500, fill_missing=False):
         new_df.replace(to_replace=0, value=np.nan, inplace=True)  # converting 0s to NaNs
         new_df.interpolate(method='linear', inplace=True)  # interpolating missing NaNs
 
-        logger.warning(f'[UPDATE] Missing {len(missing_ts)} timestamps. Performed interpolation.')
+        logger.warning(f'[UPDATE] Missing {len(missing_ts)} timestamps in {ratio} pair. Performed interpolation.')
 
         logger.debug(f'{ratio} updated succesfully. All new records: {len(new_df)}   |   '
                      f'First: {new_df.tail(1).index.item()} {new_df[f"{ratio}_close"][-1]}\n')
-        return new_df[1:]  # we drop new_df[0] because its the same as in old_df[-1]
+        return new_df
     elif missing_ts and (fill_missing is False):
         logger.error(f'[UPDATE] Missing {len(missing_ts)} timestamps. Update skipped, check manually.')
         set_bot_config(STATUS_ACTIVE=False)
         raise Exception(f'Missing {len(missing_ts)} timestamps. Update skipped, bot set inactive.')
     else:
-        return new_df[1:]  # we drop new_df[0] because its the same as in old_df[-1]
+        return new_df
 
 
 def update_all_data(fill_missing=False):

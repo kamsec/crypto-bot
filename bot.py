@@ -40,7 +40,7 @@ def main():
 
         # missing values happens once per few months, it's better to check manually, so fill_missing=False
         # if missing values appear, error will be raised and logged, and bot will be set inactive
-        update_successful = update_all_data(fill_missing=False)
+        update_successful = update_all_data(fill_missing=True)
         prediction_result = 'EVEN'  # default value if no prediction is made
         if update_successful is True:  # False in case if no new records available
             prediction_result = predict_next()  # 'UP' 'DOWN' 'EVEN'
