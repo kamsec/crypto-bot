@@ -32,7 +32,7 @@ It is designed to work in 1h intervals (data gathering, making predictions, plac
 ## crypto-bot (`bot.py`)
 
 ### Installation
-1. Install **Raspberry PI OS Lite** (tested on 2021-05-07 release) and setup internet access. Make sure to have **Python 3.7** and **git** installed. The default working directory is assumed to be ```/home/pi/```.
+1. Install **Raspberry PI OS Lite** (tested on <a href="http://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2020-02-14/">2020-02-14 release</a>) and setup internet access. Make sure to have **Python 3.7** and **git** installed. The default working directory is assumed to be ```/home/pi/```.
 2. Clone this repository
 	```sh
 	git clone https://github.com/kamsec/crypto-bot.git
@@ -40,9 +40,15 @@ It is designed to work in 1h intervals (data gathering, making predictions, plac
 3. Install requirements
 	```sh
 	cd crypto-bot
-	pip3 install -r requirements.txt
 	```
-
+	Linux:
+	```
+	pip3 install -r requirements_rpi.txt
+	```
+	Windows:
+	```
+	pip install -r requirements_win.txt
+	```
 ### Setup
 4. Run `setup.py` with command:
 	```sh
