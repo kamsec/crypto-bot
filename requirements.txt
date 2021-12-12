@@ -1,3 +1,5 @@
+--extra-index-url=https://www.piwheels.org/simple/
+--extra-index-url=https://google-coral.github.io/py-repo/
 aiohttp==3.7.4.post0
 async-timeout==3.0.1
 attrs==21.2.0
@@ -37,5 +39,4 @@ Werkzeug==2.0.1
 yarl==1.6.3
 zipp==3.5.0
 ./whl/tflite_runtime-2.3.1-cp37-cp37m-linux_armv6l.whl; platform_machine == 'armv6l'
---extra-index-url=https://google-coral.github.io/py-repo/
 tflite_runtime==2.5.0; platform_machine == 'AMD64'
