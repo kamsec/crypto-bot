@@ -37,3 +37,4 @@ Werkzeug==2.0.1
 yarl==1.6.3
 zipp==3.5.0
 ./whl/tflite_runtime-2.3.1-cp37-cp37m-linux_armv6l.whl; platform_machine == 'armv6l'
+./whl/tflite_runtime-2.5.0-cp37-cp37m-linux_armv7l.whl; platform_machine == 'armv7l'
